@@ -156,19 +156,31 @@ function table() {
 
   });
 }
-function myFunction() {
-  // Get the checkbox
-  var checkBox = document.getElementById("myCheck");
-  // Get the output text
-  var text = document.getElementById("msg");
 
-  // If the checkbox is checked, display the output text
-  if (checkBox.checked == true){
-    text.style.display = "block";
-  } else {
-    text.style.display = "none";
+var isImageCheckBox=document.getElementById("isImageCheck");
+isImageCheckBox.onclick=function(){
+  var imagesBlock=document.getElementById("imagesBlock");
+  if(isImageCheckBox.checked){
+    imagesBlock.style.display="block";
+  }else{
+    imagesBlock.style.display="none";
   }
 }
+
+
+// function myFunction() {
+//   // Get the checkbox
+//   var checkBox = document.getElementById("myCheck");
+//   // Get the output text
+//   var text = document.getElementById("msg");
+
+//   // If the checkbox is checked, display the output text
+//   if (checkBox.checked == true){
+//     text.style.display = "block";
+//   } else {
+//     text.style.display = "none";
+//   }
+// }
 
 const editbtn = (event) => {
   let id = parseInt(event.target.dataset.id);
