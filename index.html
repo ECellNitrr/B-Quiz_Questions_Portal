@@ -143,14 +143,17 @@
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
     
-    function writeQuestion(questionId, question) {
-      set(ref(db, 'questions/' + questionId), question).then(x => console.log(x));
+    async function writeQuestion(questionId, question) { //update or write a question in DB
+      return await set(ref(db, 'questions/' + questionId), question)
+      .then(x => console.log('writen to the database'))
+      .catch(y=>console.error(y));
     }
 
-    function getQuestionData(questionId) {
-      get(child(dbRef, `questions/${questionId}`)).then((snapshot) => {
+    async function getQuestions() {
+      return await get(child(dbRef, `questions/`)).then((snapshot) => {
         if (snapshot.exists()) {
           console.log(snapshot.val());
+          return snapshot.val();
         } else {
           console.log("No data available");
         }
@@ -160,7 +163,13 @@
 
     }
 
+    async function deleteQuestion(questionId){
+      return await writeQuestion(questionId, null)
+    }
 
+
+    // deleteQuestion(232323232323)
+    // getQuestions()
 
   </script>
 
