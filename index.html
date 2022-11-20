@@ -164,7 +164,7 @@
     }
 
     async function deleteQuestion(questionId){
-      return await writeQuestion(questionId, null)
+      return await writeQuestion(questionId, null).then(x=>console.log('question set to null'))
     }
 
 
