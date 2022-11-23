@@ -7,7 +7,7 @@ import bquizdb, {
 
 
 let db = bquizdb("bquizdb", {
-  products: `++id,question, option1,option2,option3,option4,index`
+  products: `++id,question, option1,option2,option3,option4,image1,image2,image3,image4,index`
 });
 
 // input tags
@@ -17,6 +17,10 @@ const option1 = document.getElementById("option1");
 const option2 = document.getElementById("option2");
 const option3 = document.getElementById("option3");
 const option4 = document.getElementById("option4");
+const image1 = document.getElementById("image1");
+const image2 = document.getElementById("image2");
+const image3 = document.getElementById("image3");
+const image4 = document.getElementById("image4");
 // const myCheck = document.getElementById("myCheck");
 const index = document.getElementById("index");
 
@@ -38,11 +42,15 @@ btncreate.onclick = event => {
     option2: option2.value,
     option3: option3.value,
     option4: option4.value,
+    image1: image1.value,
+    image2: image2.value,
+    image3: image3.value,
+    image4: image4.value,
     // myCheck: myCheck.value,
     index: index.value
   });
   
-   question.value = option1.value = option2.value = option3.value = option4.value  = index.value="";
+   question.value = option1.value = option2.value = option3.value = option4.value  =image1.value=image2.value=image3.value=image4.value= index.value="";
 
   // set id textbox value
   getData(db.products, data => {
@@ -68,6 +76,10 @@ btnupdate.onclick = () => {
       option2: option2.value,
       option3: option3.value,
       option4: option4.value,
+      image1: image1.value,
+    image2: image2.value,
+    image3: image3.value,
+    image4: image4.value,
       // myCheck: myCheck.value,
       index: index.value,
     }).then((updated) => {
@@ -78,7 +90,7 @@ btnupdate.onclick = () => {
       let updatemsg = document.querySelector(".updatemsg");
       getMsg(get, updatemsg);
 
-      question.value=option1.value=option2.value=option3.value=option4.value = index.value="";
+      question.value=option1.value=option2.value=option3.value=option4.value =image1.value=image2.value=image3.value=image4.value= index.value="";
       //console.log(get);
     })
   } else {
@@ -90,7 +102,7 @@ btnupdate.onclick = () => {
 btndelete.onclick = () => {
   db.delete();
   db = bquizdb("bquizdb", {
-    products: `++id,question, option1,option2,option3,option4,index`
+    products: `++id,question, option1,option2,option3,option4,image1,image2,image3,image4,index`
   });
   db.open();
   table();
@@ -129,6 +141,10 @@ function table() {
             td.textContent = data.option2 === data[value] ? `$ ${data[value]}` : data[value];
             td.textContent = data.option3 === data[value] ? `$ ${data[value]}` : data[value];
             td.textContent = data.option4 === data[value] ? `$ ${data[value]}` : data[value];
+            td.textContent = data.image1 === data[value] ? `$ ${data[value]}` : data[value];
+            td.textContent = data.image2 === data[value] ? `$ ${data[value]}` : data[value];
+            td.textContent = data.image3 === data[value] ? `$ ${data[value]}` : data[value];
+            td.textContent = data.image4 === data[value] ? `$ ${data[value]}` : data[value];
             // td.textContent = data.image === data[value] ? `$ ${data[value]}` : data[value];
             td.textContent = data.index === data[value] ? `$ ${data[value]}` : data[value];
           });
@@ -156,19 +172,21 @@ function table() {
 
   });
 }
-function myFunction() {
-  // Get the checkbox
-  var checkBox = document.getElementById("myCheck");
-  // Get the output text
-  var text = document.getElementById("msg");
 
-  // If the checkbox is checked, display the output text
-  if (checkBox.checked == true){
-    text.style.display = "block";
-  } else {
-    text.style.display = "none";
-  }
-}
+// var isImageCheckBox=document.getElementById("isImageCheck");
+// isImageCheckBox.onclick=function(){
+//   var imagesBlock=document.getElementById("imagesBlock");
+//   if(isImageCheckBox.checked){
+//     imagesBlock.style.display="block";
+//   }else{
+//     imagesBlock.style.display="none";
+//   }
+// }
+
+
+
+
+
 
 const editbtn = (event) => {
   let id = parseInt(event.target.dataset.id);
@@ -180,6 +198,10 @@ const editbtn = (event) => {
     option2.value = newdata.option2 || "";
     option3.value = newdata.option3 || "";
     option4.value = newdata.option4 || "";
+    image1.value = newdata.image1 || "";
+    image2.value = newdata.image2 || "";
+    image3.value = newdata.image3 || "";
+    image4.value = newdata.image4 || "";
     // myCheck.value = newdata.myCheck || "";
     index.value=newdata.index || "";
   });
@@ -191,6 +213,7 @@ const deletebtn = event => {
   db.products.delete(id);
   table();
 }
+
 
 // textbox id
 function textID(textboxid) {
