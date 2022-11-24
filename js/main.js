@@ -34,6 +34,7 @@ const btndelete = document.getElementById("btn-delete");
 // user data
 
 // event listerner for create button
+var pluginArrayArg = new Array();
 btncreate.onclick = event => {
   // insert values
   let flag = bulkcreate(db.products, {
@@ -49,8 +50,35 @@ btncreate.onclick = event => {
     // myCheck: myCheck.value,
     index: index.value
   });
+  var data = {
+    "userid.val": {
+    "answers":[
+        option1.value,
+        option2.value,
+        option3.value,
+        option4.value
+    ],
+
+    "images":[
+        image1.val,
+        image2.val
+    ],
+
+    "isImage":image1.value===""?false:true,
+    "correctIndex":index.value,
+    "question": question.value
+  },
+   }
+
+   pluginArrayArg.push(data);
+   var jsonString = JSON.stringify(pluginArrayArg)
+   console.log(jsonString);
   
-   question.value = option1.value = option2.value = option3.value = option4.value  =image1.value=image2.value=image3.value=image4.value= index.value="";
+  question.value = option1.value = option2.value = option3.value = option4.value  =image1.value=image2.value=image3.value=image4.value= index.value="";
+
+
+
+   //console.log(option1.value);
 
   // set id textbox value
   getData(db.products, data => {
