@@ -6,6 +6,24 @@ function getFormUI(formId){
     "<input type=\"text\" id=\"questionid_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"ID\" />"+
     "<textarea name=\"question\" id=\"question_"+formId+"\" class=\"form-control\" cols=\"30\" rows=\"5\" autocomplete=\"off\" placeholder=\"Question\"></textarea>"+
 
+    // Images
+    "<legend>Images</legend>"+
+    "<div class=\"\">"+
+      "<input type=\"checkbox\" id=\"is-image_"+formId+"\" >"+
+      "<label for=\"is-image_"+formId+"\">Images</label>"+
+    "</div>"+
+
+    "<div id=\"images-wrapper_"+formId+"\" style=\"display:none\">"+
+      "<div class=\"d-flex flex-column align-items-center\" id=\"image-container_"+formId+"\">"+
+        "<input type=\"text\" id=\"image1_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Image 1\" />"+
+        "<input type=\"text\" id=\"image2_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Image 2\" />"+
+        "<input type=\"text\" id=\"image3_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Image 3\" />"+
+        "<input type=\"text\" id=\"image4_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Image 4\" />"+
+        "<input type=\"text\" id=\"image5_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Image 5\" />"+
+        "<input type=\"text\" id=\"image6_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Image 6\" />"+
+      "</div>"+
+    "</div>"+
+
     "<legend> Options </legend>"+
     "<input type=\"text\" id=\"option1_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Option 1\" />"+
     "<input type=\"text\" id=\"option2_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Option 2\" />"+
@@ -18,13 +36,6 @@ function getFormUI(formId){
   "</div>";
 }
 
-function initFun(){
-  const formContainer = document.querySelector("#form-container");
-  for(let i=0; i<10; i++){
-    formContainer.innerHTML += getFormUI(i);
-  }
-}
-
 function getFormData(formIdx){
   const question = document.querySelector("#question_"+formIdx);
   const option1 = document.querySelector("#option1_"+formIdx);
@@ -33,8 +44,22 @@ function getFormData(formIdx){
   const option4 = document.querySelector("#option4_"+formIdx);
   const index = document.querySelector("#correct-index_"+formIdx);
 
+  const isImage = document.querySelector("#is-image_"+formIdx);
+  const images=[];
+  if(isImage.checked){
+    for(let i=1; i<=6; i++){
+      const image = document.querySelector("#image"+i+"_"+formIdx);
+      if(image.value !== ""){
+        images.push(image.value);
+      }
+    }
+  }
+  
+
   var data = {
     answers: [option1.value, option2.value, option3.value, option4.value],
+    isImage: isImage.checked,
+    images: images,
     correctIndex: index.value,
     question: question.value,
   };
@@ -84,4 +109,33 @@ const deletebtn = (event) => {
 function textID(textboxid) {
 }
 
-initFun();
+
+function init(){
+  const formContainer = document.querySelector("#form-container");
+  for(let i=0; i<10; i++){
+    formContainer.innerHTML += getFormUI(i);
+  }
+}
+
+function isImageCheckBoxFun(formIdx, value){
+  const imagesWrapper = document.querySelector("#images-wrapper_"+formIdx);
+  if(value){
+    imagesWrapper.style.display = "block";
+  }else{
+    imagesWrapper.style.display = "none";
+  }
+
+}
+
+function initAllEvents(){
+  const formContainer = document.querySelector("#form-container");
+  for(let i=0; i<10; i++){
+    const isImageCheckBox = document.querySelector("#is-image_"+i);
+    isImageCheckBox.onclick = (event) => {
+      isImageCheckBoxFun(i, event.target.checked);
+    };
+  }
+}
+
+init();
+initAllEvents();
