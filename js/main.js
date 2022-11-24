@@ -1,29 +1,46 @@
-import bquizdb, {
-  bulkcreate,
-  createEle,
-  getData,
-  SortObj
-} from "./module.js";
+function getFormUI(formId){
+  return "<div class=\"d-flex flex-column align-items-center\">"+
+    "<h3 class=\"text-center\">Question "+(formId+1)+"</h3>"+
+    
+    "<form class=\"w-50\" id=\"form_"+formId+"\">"+
+    "<input type=\"text\" id=\"questionid_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"ID\" />"+
+    "<textarea name=\"question\" id=\"question_"+formId+"\" class=\"form-control\" cols=\"30\" rows=\"5\" autocomplete=\"off\" placeholder=\"Question\"></textarea>"+
 
+    "<legend> Options </legend>"+
+    "<input type=\"text\" id=\"option1_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Option 1\" />"+
+    "<input type=\"text\" id=\"option2_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Option 2\" />"+
+    "<input type=\"text\" id=\"option3_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Option 3\" />"+
+    "<input type=\"text\" id=\"option4_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Option 4\" />"+
 
-let db = bquizdb("bquizdb", {
-  products: `++id,question, option1,option2,option3,option4,image1,image2,image3,image4,index`
-});
+    // Corrent index input
+    "<input type=\"number\" id=\"correct-index_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"Correct Index\" />"+
+    "</form>"+
+  "</div>";
+}
 
-// input tags
-const userid = document.getElementById("userid");
-const question = document.getElementById("question");
-const option1 = document.getElementById("option1");
-const option2 = document.getElementById("option2");
-const option3 = document.getElementById("option3");
-const option4 = document.getElementById("option4");
-const image1 = document.getElementById("image1");
-const image2 = document.getElementById("image2");
-const image3 = document.getElementById("image3");
-const image4 = document.getElementById("image4");
-// const myCheck = document.getElementById("myCheck");
-const index = document.getElementById("index");
+function initFun(){
+  const formContainer = document.querySelector("#form-container");
+  for(let i=0; i<10; i++){
+    formContainer.innerHTML += getFormUI(i);
+  }
+}
 
+function getFormData(formIdx){
+  const question = document.querySelector("#question_"+formIdx);
+  const option1 = document.querySelector("#option1_"+formIdx);
+  const option2 = document.querySelector("#option2_"+formIdx);
+  const option3 = document.querySelector("#option3_"+formIdx);
+  const option4 = document.querySelector("#option4_"+formIdx);
+  const index = document.querySelector("#correct-index_"+formIdx);
+
+  var data = {
+    answers: [option1.value, option2.value, option3.value, option4.value],
+    correctIndex: index.value,
+    question: question.value,
+  };
+
+  return data;
+}
 
 // create button
 const btncreate = document.getElementById("btn-create");
@@ -34,232 +51,37 @@ const btndelete = document.getElementById("btn-delete");
 // user data
 
 // event listerner for create button
-var pluginArrayArg = new Array();
-btncreate.onclick = event => {
-  // insert values
-  let flag = bulkcreate(db.products, {
-    question: question.value,
-    option1: option1.value,
-    option2: option2.value,
-    option3: option3.value,
-    option4: option4.value,
-    image1: image1.value,
-    image2: image2.value,
-    image3: image3.value,
-    image4: image4.value,
-    // myCheck: myCheck.value,
-    index: index.value
-  });
-  var data = {
-    "userid.val": {
-    "answers":[
-        option1.value,
-        option2.value,
-        option3.value,
-        option4.value
-    ],
+btncreate.onclick = (event) => {
+  const data=[];
+  for(let i=0; i<10; i++){
+    data.push(getFormData(i));
+  }
 
-    "images":[
-        image1.val,
-        image2.val
-    ],
-
-    "isImage":image1.value===""?false:true,
-    "correctIndex":index.value,
-    "question": question.value
-  },
-   }
-
-   pluginArrayArg.push(data);
-   var jsonString = JSON.stringify(pluginArrayArg)
-   console.log(jsonString);
-  
-  question.value = option1.value = option2.value = option3.value = option4.value  =image1.value=image2.value=image3.value=image4.value= index.value="";
-
-
-
-   //console.log(option1.value);
-
-  // set id textbox value
-  getData(db.products, data => {
-    userid.value = data.id + 1 || 1;
-  });
-  table();
-
-  let insertmsg = document.querySelector(".insertmsg");
-  getMsg(flag, insertmsg);
+  console.log(data);
 };
-
-// event listerner for create button
-btnread.onclick = table;
 
 // button update
 btnupdate.onclick = () => {
-  const id = parseInt(userid.value || 0);
-  if (id) {
-    // call dexie update method
-    db.products.update(id, {
-      question: question.value,
-      option1: option1.value,
-      option2: option2.value,
-      option3: option3.value,
-      option4: option4.value,
-      image1: image1.value,
-    image2: image2.value,
-    image3: image3.value,
-    image4: image4.value,
-      // myCheck: myCheck.value,
-      index: index.value,
-    }).then((updated) => {
-      // let get = updated ? `data updated` : `couldn't update data`;
-      let get = updated ? true : false;
 
-      // display message
-      let updatemsg = document.querySelector(".updatemsg");
-      getMsg(get, updatemsg);
-
-      question.value=option1.value=option2.value=option3.value=option4.value =image1.value=image2.value=image3.value=image4.value= index.value="";
-      //console.log(get);
-    })
-  } else {
-    console.log(`Please Select id: ${id}`);
-  }
-}
+};
 
 // delete button
 btndelete.onclick = () => {
-  db.delete();
-  db = bquizdb("bquizdb", {
-    products: `++id,question, option1,option2,option3,option4,image1,image2,image3,image4,index`
-  });
-  db.open();
-  table();
-  textID(userid);
-  // display message
-  let deletemsg = document.querySelector(".deletemsg");
-  getMsg(true, deletemsg);
-}
-
-window.onload = event => {
-  // set id textbox value
-  textID(userid);
 };
 
+window.onload = (event) => {
 
-
-
-// create dynamic table
-function table() {
-  const tbody = document.getElementById("tbody");
-  const notfound = document.getElementById("notfound");
-  notfound.textContent = "";
-  // remove all childs from the dom first
-  while (tbody.hasChildNodes()) {
-    tbody.removeChild(tbody.firstChild);
-  }
-
-
-  getData(db.products, (data, index) => {
-    if (data) {
-      createEle("tr", tbody, tr => {
-        for (const value in data) {
-          createEle("td", tr, td => {
-            td.textContent = data.question === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.option1 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.option2 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.option3 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.option4 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.image1 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.image2 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.image3 === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.image4 === data[value] ? `$ ${data[value]}` : data[value];
-            // td.textContent = data.image === data[value] ? `$ ${data[value]}` : data[value];
-            td.textContent = data.index === data[value] ? `$ ${data[value]}` : data[value];
-          });
-        }
-        createEle("td", tr, td => {
-          createEle("i", td, i => {
-            i.className += "fas fa-edit btnedit";
-            i.setAttribute(`data-id`, data.id);
-            // store number of edit buttons
-            i.onclick = editbtn;
-          });
-        })
-        createEle("td", tr, td => {
-          createEle("i", td, i => {
-            i.className += "fas fa-trash-alt btndelete";
-            i.setAttribute(`data-id`, data.id);
-            // store number of edit buttons
-            i.onclick = deletebtn;
-          });
-        })
-      });
-    } else {
-      notfound.textContent = "No record found in the database...!";
-    }
-
-  });
-}
-
-// var isImageCheckBox=document.getElementById("isImageCheck");
-// isImageCheckBox.onclick=function(){
-//   var imagesBlock=document.getElementById("imagesBlock");
-//   if(isImageCheckBox.checked){
-//     imagesBlock.style.display="block";
-//   }else{
-//     imagesBlock.style.display="none";
-//   }
-// }
-
-
-
-
-
+};
 
 const editbtn = (event) => {
-  let id = parseInt(event.target.dataset.id);
-  db.products.get(id, function (data) {
-    let newdata = SortObj(data);
-    userid.value = newdata.id || 0;
-    question.value = newdata.question || "";
-    option1.value = newdata.option1 || "";
-    option2.value = newdata.option2 || "";
-    option3.value = newdata.option3 || "";
-    option4.value = newdata.option4 || "";
-    image1.value = newdata.image1 || "";
-    image2.value = newdata.image2 || "";
-    image3.value = newdata.image3 || "";
-    image4.value = newdata.image4 || "";
-    // myCheck.value = newdata.myCheck || "";
-    index.value=newdata.index || "";
-  });
-}
+};
 
-// delete icon remove element 
-const deletebtn = event => {
-  let id = parseInt(event.target.dataset.id);
-  db.products.delete(id);
-  table();
-}
-
+// delete icon remove element
+const deletebtn = (event) => {
+};
 
 // textbox id
 function textID(textboxid) {
-  getData(db.products, data => {
-    textboxid.value = data.id + 1 || 1;
-  });
 }
 
-// function msg
-function getMsg(flag, element) {
-  if (flag) {
-    // call msg 
-    element.className += " movedown";
-
-    setTimeout(() => {
-      element.classList.forEach(classname => {
-        classname == "movedown" ? undefined : element.classList.remove('movedown');
-      })
-    }, 4000);
-  }
-}
+initFun();
