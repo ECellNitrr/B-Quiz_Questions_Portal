@@ -1,3 +1,7 @@
+import {
+  config
+} from './config.js'
+
 function getFormUI(formId){
   return "<div class=\"d-flex flex-column align-items-center\">"+
     "<h3 class=\"text-center\">Question "+(formId+1)+"</h3>"+
@@ -52,12 +56,18 @@ const btndelete = document.getElementById("btn-delete");
 
 // event listerner for create button
 btncreate.onclick = (event) => {
-  const data=[];
+  const data={};
   for(let i=0; i<10; i++){
-    data.push(getFormData(i));
+    const formData = getFormData(i);
+    data[formData.question] = formData;
   }
 
-  console.log(data);
+  // Initialize Firebase
+  firebase.initializeApp(config);
+  firebase.analytics();
+
+  const db = firebase.firestore();
+  db.collection("questions").doc("questions").set(data)
 };
 
 // button update
@@ -79,9 +89,5 @@ const editbtn = (event) => {
 // delete icon remove element
 const deletebtn = (event) => {
 };
-
-// textbox id
-function textID(textboxid) {
-}
 
 initFun();

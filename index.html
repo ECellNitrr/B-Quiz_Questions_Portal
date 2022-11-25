@@ -30,6 +30,11 @@
   <!-- Custom main file-->
   <script src="../js/main.js" type="module"></script>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+  
+
 </head>
 
 <body>
@@ -84,65 +89,6 @@
   <div class="w-100 btn btn-success insertmsg">Data Inserted Successfully...!</div>
   <div class="w-100 btn btn-warning updatemsg">Data Updated..! Refresh Database To See Result</div>
   <div class="w-100 btn btn-danger deletemsg">Data Deleted..!</div>
-
-
-  <!-- firebase -->
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue, child, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyDcJNCUbsunWGtyWgexzeEeh4ZN4j4lDjM",
-      authDomain: "database123-eadab.firebaseapp.com",
-      databaseURL: "https://database123-eadab-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "database123-eadab",
-      storageBucket: "database123-eadab.appspot.com",
-      messagingSenderId: "424354142223",
-      appId: "1:424354142223:web:141f9b38125cc8e9606b7a",
-      measurementId: "G-Q6MC74701H"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const dbRef = ref(getDatabase());
-    
-    async function writeQuestion(questionId, question) { //update or write a question in DB
-      return await set(ref(db, 'questions/' + questionId), question)
-      .then(x => console.log('writen to the database'))
-      .catch(y=>console.error(y));
-    }
-
-    async function getQuestions() {
-      return await get(child(dbRef, `questions/`)).then((snapshot) => {
-        if (snapshot.exists()) {
-          console.log(snapshot.val());
-          return snapshot.val();
-        } else {
-          console.log("No data available");
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
-
-    }
-
-    async function deleteQuestion(questionId){
-      return await writeQuestion(questionId, null).then(x=>console.log('question set to null'))
-    }
-
-
-    // deleteQuestion(232323232323)
-    // getQuestions()
-
-  </script>
-
-
 </body>
 
 </html>
