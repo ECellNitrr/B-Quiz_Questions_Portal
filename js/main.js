@@ -1,9 +1,12 @@
+import {
+  config
+} from './config.js'
+
 function getFormUI(formId){
   return "<div class=\"d-flex flex-column align-items-center\">"+
     "<h3 class=\"text-center\">Question "+(formId+1)+"</h3>"+
     
     "<form class=\"w-50\" id=\"form_"+formId+"\">"+
-    "<input type=\"text\" id=\"questionid_"+formId+"\" class=\"form-control\" autocomplete=\"off\" placeholder=\"ID\" />"+
     "<textarea name=\"question\" id=\"question_"+formId+"\" class=\"form-control\" cols=\"30\" rows=\"5\" autocomplete=\"off\" placeholder=\"Question\"></textarea>"+
 
     // Images
@@ -76,13 +79,39 @@ const btndelete = document.getElementById("btn-delete");
 // user data
 
 // event listerner for create button
-btncreate.onclick = (event) => {
-  const data=[];
+btncreate.onclick = async (event) => {
+  const collectionName = document.querySelector("#collection-name").value;
+  const documnetName = document.querySelector("#document-name").value;
+
+  const data={};
   for(let i=0; i<10; i++){
-    data.push(getFormData(i));
+    const formData = getFormData(i);
+    data[`q${i+1}`] = formData;
   }
 
-  console.log(data);
+  const db = firebase.firestore();
+  // Create a loader pop up which will be removed after the data is uploaded
+  swal({
+    title: 'Uploading data',
+    html: 'Please wait...',
+    icon: 'info',
+    allowOutsideClick: false,
+  });
+
+  // Upload data to firestore
+  const update=await db.collection(collectionName).doc(documnetName).set(data);
+
+  // Refresh the page
+  location.reload();
+
+  // Show the success message
+  swal({
+    title: 'Success',
+    text: 'Data uploaded successfully',
+    icon: 'success',
+    confirmButtonText: 'Ok'
+  });
+
 };
 
 // button update
@@ -115,6 +144,8 @@ function init(){
   for(let i=0; i<10; i++){
     formContainer.innerHTML += getFormUI(i);
   }
+
+  firebase.initializeApp(config);
 }
 
 function isImageCheckBoxFun(formIdx, value){
