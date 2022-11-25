@@ -34,6 +34,8 @@
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
   
+  <!-- Sweet Alert -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </head>
 
@@ -43,6 +45,12 @@
       <h1 class="bg-light py-4 text-info">
         <i class="fas fa-plug"></i> B-QUIZ APP
       </h1>
+
+      <div class="p-4" >
+        <h2 class="text-info p-2">Firestore Details</h2>
+        <input class="m-2 p-1" type="text" id="collection-name" placeholder="Collection" />
+        <input class="m-2 p-1" type="text" id="document-name" placeholder="Document" />
+      </div>
       <div class="d-flex flex-column" id="form-container">
         
       </div>
