@@ -101,17 +101,18 @@ btncreate.onclick = async (event) => {
   // Upload data to firestore
   const update=await db.collection(collectionName).doc(documnetName).set(data);
 
-  // Refresh the page
-  location.reload();
-
   // Show the success message
-  swal({
+  const decision=await swal({
     title: 'Success',
     text: 'Data uploaded successfully',
     icon: 'success',
     confirmButtonText: 'Ok'
   });
 
+  
+  console.log(decision)
+  // Refresh the page
+  location.reload();
 };
 
 // button update
