@@ -63,7 +63,7 @@ function getFormData(formIdx){
     answers: [option1.value, option2.value, option3.value, option4.value],
     isImage: isImage.checked,
     images: images,
-    correctIndex: index.value,
+    correctIndex: parseInt(index.value),
     question: question.value,
   };
 
